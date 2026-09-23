@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SPHORMIGAJR">
+<!-- Android PWA -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="SPHORMIGAJR">
+<meta name="theme-color" content="#6366f1">
+<!-- Icons inline para iOS y Android sin archivo externo -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236366f1'/%3E%3Ctext y='.9em' font-size='72' x='12'%3E🐜%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236366f1'/%3E%3Ctext y='.9em' font-size='72' x='12'%3E🐜%3C/text%3E%3C/svg%3E">
+<!-- Manifest inline -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22SPHORMIGAJR%22%2C%22short_name%22%3A%22SPHORMIGAJR%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f0f4ff%22%2C%22theme_color%22%3A%22%236366f1%22%7D">
+<title>SPHORMIGAJR</title>
+<style>
+:root{
+  --p:#6366f1;--p2:#818cf8;
+  --pk:#ec4899;--pk2:#f9a8d4;
+  --te:#0ea5e9;--gr:#22c55e;
+  --or:#f97316;--re:#ef4444;
+  --yw:#fbbf24;--pu:#a855f7;
+  --bg:#f0f4ff;--card:#fff;
+  --txt:#1e293b;--sub:#64748b;
+  --bord:#e2e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;
+  padding-bottom:max(60px, env(safe-area-inset-bottom));
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+  color:var(--txt);
+}
+
+/* ─── WRAP (contenido centrado) ─── */
+.wrap{max-width:520px;margin:0 auto;padding:0 14px;}
+
+/* ─── HEADER (ancho completo) ─── */
+.hdr{
+  background:linear-gradient(135deg,#818cf8 0%,#6366f1 30%,#a855f7 65%,#ec4899 100%);
+  padding:22px 20px 18px;text-align:center;position:relative;overflow:hidden;
+  border-radius:0 0 28px 28px;
+  box-shadow:0 8px 30px rgba(99,102,241,.4);
+  z-index:1;
+}
+.hdr::before,.hdr::after{
+  content:''; position:absolute;border-radius:50%;opacity:.12;
+}
+.hdr::before{width:120px;height:120px;background:#fff;top:-40px;left:-30px;}
+.hdr::after{width:80px;height:80px;background:#fbbf24;bottom:-20px;right:-10px;}
+/* floating sparkles */
+.sp{position:absolute;font-size:.9rem;opacity:.3;animation:tw 3s ease-in-out infinite;}
+.sp:nth-child(1){top:8px;left:12%;animation-delay:0s;}
+.sp:nth-child(2){top:6px;right:16%;animation-delay:1s;}
+.sp:nth-child(3){bottom:7px;left:28%;animation-delay:2s;}
+.sp:nth-child(4){bottom:5px;right:10%;animation-delay:.6s;}
+@keyframes tw{0%,100%{opacity:.3;transform:scale(1);}50%{opacity:.6;transform:scale(1.4);}}
+
+.dark-btn{
+  position:absolute;top:10px;right:10px;width:32px;height:32px;
+  background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.35);
+  border-radius:9px;font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;z-index:10;
+  transition:.2s;
+}
+.dark-btn:hover{background:rgba(255,255,255,.38);}
+
+.hdr-ico{font-size:1.6rem;letter-spacing:4px;display:block;margin-bottom:2px;}
+.hdr h1{
+  font-family:'Bubblegum Sans',cursive;font-size:1.2rem;color:#fff;
+  text-shadow:2px 3px 0 rgba(0,0,0,.22),0 0 24px rgba(255,255,255,.28);
+  letter-spacing:2px;line-height:1;
+}
+.hdr-sub{
+  font-family:'Bubblegum Sans',cursive;color:rgba(255,255,255,.95);
+  font-size:1.1rem;letter-spacing:3px;margin-top:5px;
+}
+.hdr-kids{font-size:1.1rem;letter-spacing:5px;margin-top:5px;opacity:.85;}
+
+/* ─── FECHA NAC (siempre visible) ─── */
+.top-field{padding:12px 14px 0;max-width:520px;margin:0 auto;}
+
+.lbl{display:block;font-size:.65rem;font-weight:900;color:var(--sub);letter-spacing:1.1px;text-transform:uppercase;margin-bottom:5px;}
+
+.inp{
+  width:100%;border:2.5px solid var(--bord);border-radius:12px;
+  padding:9px 12px;font-family:'Nunito',sans-serif;
+  font-size:16px;font-weight:700;color:var(--txt);background:#f8fafc;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.inp:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(99,102,241,.14);}
+
+.edad-badge{
+  display:none;
+  background:linear-gradient(135deg,#d1fae5,#a7f3d0);
+  border:2px solid #6ee7b7;border-radius:11px;
+  padding:7px 12px;text-align:center;margin-top:8px;
+}
+.eb-lbl{font-size:.62rem;font-weight:900;color:#065f46;letter-spacing:.8px;text-transform:uppercase;}
+.eb-val{font-family:'Bubblegum Sans',cursive;font-size:1rem;color:#047857;}
+
+/* ─── TABS ─── */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px 14px 0;max-width:520px;margin:0 auto;}
+.tab{
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:11px 6px;border-radius:14px;border:2.5px solid var(--bord);
+  font-family:'Bubblegum Sans',cursive;font-size:.88rem;letter-spacing:.3px;
+  cursor:pointer;background:#f8fafc;color:var(--sub);
+  transition:transform .14s,box-shadow .14s;
+}
+.tab:hover{transform:translateY(-2px);}
+.tab .tico{font-size:1rem;}
+.tab.t0.on{background:linear-gradient(135deg,#818cf8,#6366f1);color:#fff;border-color:#6366f1;box-shadow:0 4px 16px rgba(99,102,241,.38);}
+.tab.t1.on{background:linear-gradient(135deg,#c084fc,#ec4899);color:#fff;border-color:#c084fc;box-shadow:0 4px 16px rgba(192,132,252,.38);}
+.tab.t2.on{background:linear-gradient(135deg,#34d399,#0ea5e9);color:#fff;border-color:#34d399;box-shadow:0 4px 16px rgba(52,211,153,.38);}
+.tab.t3.on{background:linear-gradient(135deg,#f87171,#f97316);color:#fff;border-color:#f87171;box-shadow:0 4px 16px rgba(248,113,113,.38);}
+
+/* ─── ERROR ─── */
+.err{display:none;margin:8px auto 0;max-width:520px;padding:0 14px;}
+.err-inner{background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;border-radius:11px;padding:9px 13px;font-size:.8rem;font-weight:800;}
+
+/* ─── PANELS ─── */
+.panel{display:none;padding:12px 14px 4px;max-width:520px;margin:0 auto;}
+.panel.on{display:block;}
+
+/* ══ PANEL 0: CONTROL CRED ══ */
+.cred-tip{
+  background:linear-gradient(135deg,#eff6ff,#e0e7ff);
+  border:2px solid #c7d2fe;border-radius:12px;
+  padding:8px 12px;margin-bottom:11px;
+  font-size:.75rem;font-weight:700;color:#3730a3;
+  text-align:center;line-height:1.45;
+}
+
+/* age grid */
+.agrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.acell{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.acell input{
+  width:100%;border:2.5px solid #c7d2fe;border-radius:11px;
+  padding:9px 3px;text-align:center;
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+  color:#6366f1;background:#eff6ff;outline:none;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.acell input:focus{border-color:#818cf8;box-shadow:0 0 0 3px rgba(99,102,241,.16);}
+.acell span{font-size:.6rem;font-weight:900;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+
+/* fecha + nro */
+.drow{display:flex;gap:7px;align-items:flex-end;margin-top:10px;}
+.drow .dw{flex:1;} .drow .cw{width:66px;}
+.cinp{text-align:center;font-size:16px;font-weight:900;color:#ec4899;background:#fdf2f8;border-color:#fbcfe8;-webkit-appearance:none;appearance:none;}
+.cinp:focus{border-color:#ec4899;box-shadow:0 0 0 3px rgba(236,72,153,.14);}
+select.inp{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+
+.btn-calc{
+  width:100%;margin-top:11px;
+  background:linear-gradient(135deg,#818cf8,#6366f1);
+  color:#fff;border:none;border-radius:14px;padding:13px;
+  font-family:'Bubblegum Sans',cursive;font-size:1rem;letter-spacing:.5px;
+  cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,.38);
+  transition:transform .14s;
+}
+.btn-calc:hover{transform:translateY(-2px);}
+
+/* result cards */
+#credRes{margin-top:3px;}
+.ghdr{display:flex;align-items:center;gap:7px;margin:16px 0 7px;}
+.gbadge{
+  font-family:'Bubblegum Sans',cursive;font-size:.7rem;
+  letter-spacing:.6px;padding:4px 11px;border-radius:18px;
+  color:#fff;white-space:nowrap;flex-shrink:0;
+}
+.gb0{background:linear-gradient(135deg,#f97316,#fbbf24);}
+.gb1{background:linear-gradient(135deg,#22c55e,#0ea5e9);}
+.gb2{background:linear-gradient(135deg,#818cf8,#6366f1);}
+.gb3{background:linear-gradient(135deg,#c084fc,#ec4899);}
+.gb4{background:linear-gradient(135deg,#f87171,#f97316);}
+.gb5{background:linear-gradient(135deg,#0ea5e9,#22c55e);}
+.gline{flex:1;height:2px;background:#e2e8f0;border-radius:2px;}
+
+.ccard{
+  border-radius:13px;padding:10px 13px;margin-bottom:6px;
+  display:flex;justify-content:space-between;align-items:center;
+  border:2px solid #e2e8f0;background:#f8fafc;
+  transition:transform .12s;
+}
+.ccard:hover{transform:translateX(3px);}
+.ccard.hl{background:linear-gradient(135deg,#818cf8,#6366f1);border-color:#6366f1;box-shadow:0 3px 12px rgba(99,102,241,.3);}
+.ccard.hl .cn,.ccard.hl .ce{color:rgba(255,255,255,.82);}
+.ccard.hl .cf{color:#fff;}
+.cleft{display:flex;flex-direction:column;gap:1px;}
+.cn{font-size:.6rem;font-weight:900;color:#6366f1;text-transform:uppercase;letter-spacing:1px;}
+.ce{font-size:.7rem;font-weight:700;color:var(--sub);}
+.cf{font-family:'Bubblegum Sans',cursive;font-size:1.2rem;color:var(--txt);}
+
+/* ══ PANEL 1: SUPLEMENTACIÓN ══ */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.sbtn{
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:11px 6px;border-radius:14px;border:2.5px solid var(--bord);
+  font-family:'Bubblegum Sans',cursive;font-size:.88rem;letter-spacing:.3px;
+  cursor:pointer;background:#f8fafc;color:var(--sub);
+  transition:transform .14s,box-shadow .14s;
+  -webkit-tap-highlight-color:transparent;
+  min-height:50px;width:100%;
+  line-height:1.2;
+}
+.sbtn .sico{font-size:1rem;}
+.sbtn:hover{transform:translateY(-2px);}
+.sbtn.sp-btn.on{background:linear-gradient(135deg,#c084fc,#6366f1);color:#fff;border-color:#c084fc;box-shadow:0 4px 16px rgba(192,132,252,.4);animation:glowP 2s ease-in-out infinite;}
+.sbtn.ss.on{background:linear-gradient(135deg,#fbbf24,#f97316);color:#fff;border-color:#fbbf24;box-shadow:0 4px 16px rgba(251,191,36,.4);animation:glowS 2s ease-in-out infinite;}
+@keyframes glowP{0%,100%{box-shadow:0 4px 16px rgba(192,132,252,.4);}50%{box-shadow:0 4px 26px rgba(192,132,252,.75);}}
+@keyframes glowS{0%,100%{box-shadow:0 4px 16px rgba(251,191,36,.4);}50%{box-shadow:0 4px 26px rgba(251,191,36,.75);}}
+
+.dcard{
+  border-radius:13px;padding:10px 13px;margin-bottom:6px;
+  display:flex;justify-content:space-between;align-items:center;
+  border:2px solid #e9d5ff;background:#faf5ff;
+}
+.dn{font-size:.6rem;font-weight:900;color:#a855f7;text-transform:uppercase;letter-spacing:1px;}
+.dc{font-size:.7rem;font-weight:700;color:var(--sub);}
+.df{font-family:'Bubblegum Sans',cursive;font-size:1.2rem;color:var(--txt);}
+
+/* ══ PANEL 2: CÁLCULO MANUAL ══ */
+.btn-man{
+  width:100%;margin-top:11px;
+  background:linear-gradient(135deg,#34d399,#0ea5e9);
+  color:#fff;border:none;border-radius:14px;padding:13px;
+  font-family:'Bubblegum Sans',cursive;font-size:1rem;
+  cursor:pointer;box-shadow:0 4px 16px rgba(52,211,153,.38);
+  transition:transform .14s;
+}
+.btn-man:hover{transform:translateY(-2px);}
+.manres{
+  display:none;margin-top:11px;
+  background:linear-gradient(135deg,#f0fdf4,#ecfdf5);
+  border:2px solid #86efac;border-radius:13px;
+  padding:12px;text-align:center;
+}
+.rl{font-size:.62rem;font-weight:900;color:#065f46;text-transform:uppercase;letter-spacing:1px;}
+.rv{font-family:'Bubblegum Sans',cursive;font-size:1.45rem;color:#047857;margin:2px 0 7px;}
+
+/* ══ PANEL 3: HB ══ */
+.btn-hb{
+  width:100%;margin-top:11px;
+  background:linear-gradient(135deg,#f87171,#f97316);
+  color:#fff;border:none;border-radius:14px;padding:13px;
+  font-family:'Bubblegum Sans',cursive;font-size:1rem;
+  cursor:pointer;box-shadow:0 4px 16px rgba(248,113,113,.38);
+  transition:transform .14s;
+}
+.btn-hb:hover{transform:translateY(-2px);}
+.hbres{
+  display:none;margin-top:11px;
+  background:linear-gradient(135deg,#fff5f5,#fef2f2);
+  border:2px solid #fca5a5;border-radius:13px;
+  padding:12px;text-align:center;
+}
+.hbrl{font-size:.62rem;font-weight:900;color:#991b1b;text-transform:uppercase;letter-spacing:1px;}
+.hbrv{font-family:'Bubblegum Sans',cursive;font-size:1.6rem;margin:2px 0 5px;}
+
+/* ─── LIMPIAR ─── */
+.btn-limp{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  width:calc(100% - 28px);max-width:492px;
+  margin:13px auto 20px;
+  background:linear-gradient(135deg,#f97316,#ef4444);
+  color:#fff;border:none;border-radius:16px;padding:14px;
+  font-family:'Bubblegum Sans',cursive;font-size:1.05rem;letter-spacing:.5px;
+  cursor:pointer;box-shadow:0 4px 16px rgba(249,115,22,.4);
+  animation:pls 2.5s ease-in-out infinite;
+  transition:transform .14s;
+}
+.btn-limp:hover{transform:translateY(-2px);animation:none;}
+@keyframes pls{0%,100%{box-shadow:0 4px 16px rgba(249,115,22,.4);}50%{box-shadow:0 6px 26px rgba(249,115,22,.7);}}
+
+/* spacing */
+.mt8{margin-top:8px;} .mt10{margin-top:10px;}
+
+/* ─── PREMATURO / EDAD CORREGIDA ─── */
+.prem-alert{
+  display:none;
+  margin-top:8px;
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  border:2px solid #fed7aa;border-radius:11px;
+  padding:8px 12px;
+  align-items:center;gap:8px;
+  flex-wrap:wrap;
+}
+.prem-alert.show{display:flex;}
+.prem-msg{
+  flex:1;min-width:160px;
+  font-size:.73rem;font-weight:800;color:#92400e;line-height:1.4;
+}
+.btn-corregir{
+  flex-shrink:0;
+  background:linear-gradient(135deg,#f97316,#ea580c);
+  color:#fff;border:none;border-radius:10px;
+  padding:7px 12px;
+  font-family:'Bubblegum Sans',cursive;font-size:.82rem;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(249,115,22,.4);
+  transition:transform .14s;
+  min-height:36px;
+}
+.btn-corregir:hover{transform:translateY(-1px);}
+.btn-corregir:active{transform:scale(.97);}
+
+.prem-form{
+  display:none;
+  margin-top:7px;
+  background:linear-gradient(135deg,#fef3c7,#fde68a22);
+  border:2px solid #fcd34d;border-radius:11px;
+  padding:10px 12px;
+}
+.prem-form.show{display:block;}
+.prem-inp-row{display:flex;align-items:flex-end;gap:7px;margin-top:6px;}
+.prem-inp-wrap{flex:1;}
+.prem-num{
+  width:100%;border:2.5px solid #fcd34d;border-radius:10px;
+  padding:9px 10px;text-align:center;
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+  color:#92400e;background:#fffbeb;outline:none;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.prem-num:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,.16);}
+.btn-calc-corr{
+  flex-shrink:0;
+  background:linear-gradient(135deg,#fbbf24,#f97316);
+  color:#fff;border:none;border-radius:10px;
+  padding:9px 13px;
+  font-family:'Bubblegum Sans',cursive;font-size:.85rem;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(251,191,36,.4);
+  transition:transform .14s;
+  min-height:44px;
+}
+.btn-calc-corr:hover{transform:translateY(-1px);}
+.btn-calc-corr:active{transform:scale(.97);}
+
+.prem-hint-box{
+  background:#fff7ed;border:1.5px dashed #fdba74;border-radius:9px;
+  padding:8px 11px;margin:6px 0 8px;
+  font-size:.72rem;font-weight:700;color:#78350f;line-height:1.55;
+}
+.prem-pista{
+  display:none;margin-top:7px;
+  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+  border:2px solid #86efac;border-radius:9px;
+  padding:7px 11px;
+  font-size:.75rem;font-weight:800;color:#14532d;
+  text-align:center;line-height:1.5;
+}
+.prem-pista.show{display:block;}
+.dark .prem-hint-box{background:#1c1108;border-color:#92400e;color:#fed7aa;}
+.dark .prem-pista{background:#052e16;border-color:#166534;color:#4ade80;}
+
+.edad-corregida-badge{
+  display:none;
+  margin-top:8px;
+  background:linear-gradient(135deg,#fdf4ff,#f3e8ff);
+  border:2px solid #d8b4fe;border-radius:11px;
+  padding:8px 12px;
+}
+.edad-corregida-badge.show{display:block;}
+.ecb-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:3px;}
+.ecb-lbl{font-size:.6rem;font-weight:900;color:#6b21a8;letter-spacing:.8px;text-transform:uppercase;}
+.ecb-val{font-family:'Bubblegum Sans',cursive;font-size:.95rem;color:#7e22ce;}
+.ecb-sep{height:1px;background:#e9d5ff;margin:5px 0;}
+
+/* ─── DESKTOP ─── */
+@media (min-width:600px){
+  .tabs{grid-template-columns:1fr 1fr 1fr 1fr;padding:14px 14px 0;}
+  .hdr h1{font-size:2.6rem;}
+  .hdr-sub{font-size:.85rem;}
+  .top-field,.panel{padding-left:14px;padding-right:14px;}
+}
+
+/* ─── MOBILE TOUCH IMPROVEMENTS ─── */
+.tab,.btn-calc,.btn-man,.btn-hb,.btn-limp{min-height:48px;}
+.sbtn{min-height:48px;}
+input,select{font-size:16px !important;}
+.tab:active,.btn-calc:active,.btn-man:active,.btn-hb:active,.sbtn:active,.btn-limp:active{
+  transform:scale(.97);opacity:.9;
+}
+
+/* ─── DARK MODE ─── */
+.dark body{background:#0f172a;}
+.dark .inp{background:#334155;border-color:#475569;color:#e2e8f0;}
+.dark .acell input{background:#2d2060;border-color:#4c1d95;color:#c4b5fd;}
+.dark .cinp{background:#3b0764;border-color:#86198f;color:#f0abfc;}
+.dark .tab{background:#334155;color:#94a3b8;border-color:#475569;}
+.dark .ccard{background:#1e293b;border-color:#334155;}
+.dark .cf,.dark .df{color:#e2e8f0;}
+.dark .dcard{background:#1e293b;border-color:#3b1f5e;}
+.dark .sbtn{background:#334155;border-color:#475569;color:#94a3b8;}
+.dark .cred-tip{background:#1e1b4b;border-color:#3730a3;color:#a5b4fc;}
+.dark .gline{background:#334155;}
+.dark .manres{background:#052e16;border-color:#166534;}
+.dark .rl,.dark .rv{color:#4ade80;}
+.dark .hbres{background:#1c0a0a;border-color:#7f1d1d;}
+.dark .hbrl{color:#fca5a5;}
+.dark .edad-badge{background:#022c22;border-color:#065f46;}
+.dark .eb-lbl{color:#6ee7b7;} .dark .eb-val{color:#34d399;}
+.dark .lbl{color:#94a3b8;}
+.dark select.inp option{background:#334155;}
+.dark .prem-alert{background:linear-gradient(135deg,#1c1108,#2a1800);border-color:#92400e;}
+.dark .prem-msg{color:#fed7aa;}
+.dark .prem-form{background:linear-gradient(135deg,#1f1500,#2d1f00);border-color:#92400e;}
+.dark .prem-num{background:#1f1500;border-color:#b45309;color:#fcd34d;}
+.dark .edad-corregida-badge{background:linear-gradient(135deg,#1a0a2e,#2d1456);border-color:#7e22ce;}
+.dark .ecb-lbl{color:#c4b5fd;} .dark .ecb-val{color:#d8b4fe;}
+.dark .ecb-sep{background:#4c1d95;}
+</style>
+
+<style id="iphone-safari-compat">
+  html { -webkit-text-size-adjust: 100%; }
+  body { -webkit-tap-highlight-color: transparent; }
+  input, button, select, textarea {
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  button { touch-action: manipulation; }
+  input[type="date"] { min-height: 44px; }
+</style>
+<script>
+  // iPhone/Safari standalone-mode viewport refresh.
+  (function () {
+    function refreshViewport() {
+      document.documentElement.style.setProperty('--app-height', window.innerHeight + 'px');
+    }
+    window.addEventListener('resize', refreshViewport, {passive:true});
+    window.addEventListener('orientationchange', function () {
+      setTimeout(refreshViewport, 250);
+    }, {passive:true});
+    refreshViewport();
+  })();
+</script>
+
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="hdr">
+  <span class="sp">⭐</span><span class="sp">🌟</span>
+  <span class="sp">✨</span><span class="sp">💫</span>
+  <button class="dark-btn" id="darkBtn" onclick="toggleDark()">🌙</button>
+  <span class="hdr-ico">💻 👩‍⚕️</span>
+  <h1>CALCULADORA CRED</h1>
+  <div class="hdr-sub">🐜 SPHORMIGAJR 🐜</div>
+  <div class="hdr-kids">👶 🍼 🧒 👦</div>
+</div>
+
+<!-- ══ FECHA NACIMIENTO (siempre visible) ══ -->
+<div class="top-field">
+  <label class="lbl">🍰 Fecha de nacimiento</label>
+  <input type="date" id="fechaNac" class="inp" onchange="actualizarEdad()">
+  <div class="edad-badge" id="edadBadge">
+    <div class="eb-lbl">Edad actual del niño</div>
+    <div class="eb-val" id="edadTexto"></div>
+  </div>
+
+  <!-- Alerta prematuro -->
+  <div class="prem-alert" id="premAlert">
+    <div class="prem-msg">⚠️ Si tu niño nació <strong>prematuro</strong>, esta no es su edad correcta</div>
+    <button class="btn-corregir" onclick="mostrarFormCorreccion()">✏️ Corregir edad</button>
+  </div>
+
+  <!-- Formulario corrección -->
+  <div class="prem-form" id="premForm">
+    <label class="lbl">🍼 Semanas de gestación al nacer</label>
+    <div class="prem-hint-box">
+      💡 Ingresa <strong>a cuántas semanas nació tu bebé</strong>.<br>
+      Un embarazo a término completa <strong>40 semanas</strong>.<br>
+      <span style="color:#92400e;">Ejemplo: si nació a las 32 semanas → escribe <strong>32</strong></span>
+    </div>
+    <div class="prem-inp-row">
+      <div class="prem-inp-wrap">
+        <input type="number" id="semanasPrematuro" class="prem-num"
+               placeholder="Ej: 32" min="23" max="37" inputmode="numeric"
+               oninput="mostrarPistaSemanas(this.value)">
+      </div>
+      <button class="btn-calc-corr" onclick="calcEdadCorregida()">⚡ Calcular</button>
+    </div>
+    <div class="prem-pista" id="premPista"></div>
+  </div>
+
+  <!-- Resultado edad corregida -->
+  <div class="edad-corregida-badge" id="edadCorregidaBadge">
+    <div class="ecb-row">
+      <span class="ecb-lbl">Semanas antes del término</span>
+      <span class="ecb-val" id="ecSemanas"></span>
+    </div>
+    <div class="ecb-sep"></div>
+    <div class="ecb-row">
+      <span class="ecb-lbl">Edad cronológica</span>
+      <span class="ecb-val" id="ecCronologica"></span>
+    </div>
+    <div class="ecb-row">
+      <span class="ecb-lbl">✅ Edad corregida</span>
+      <span class="ecb-val" id="ecCorregida" style="color:#7c3aed;font-size:1.05rem;"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TABS ══ -->
+<div class="tabs">
+  <button class="tab t0 on" id="tab0" onclick="irTab(0)"><span class="tico">📋</span> Control CRED</button>
+  <button class="tab t1"    id="tab1" onclick="irTab(1)"><span class="tico">💊</span> Suplementación</button>
+  <button class="tab t2"    id="tab2" onclick="irTab(2)"><span class="tico">📅</span> Cálculo Manual</button>
+  <button class="tab t3"    id="tab3" onclick="irTab(3)"><span class="tico">🩸</span> HB</button>
+</div>
+
+<div class="err" id="errBox"><div class="err-inner" id="errInner"></div></div>
+
+<!-- ══════════════════════════════════
+     PANEL 0 – CONTROL CRED
+══════════════════════════════════ -->
+<div class="panel on" id="panel0">
+  <div class="cred-tip">🌈 Ingresa edad, fecha y número de control<br>para ver <strong>todos los controles futuros</strong> hasta los 4 años</div>
+
+  <label class="lbl">🎂 Edad actual del niño</label>
+  <div class="agrid">
+    <div class="acell"><input type="number" id="cAnios" min="0" max="4" placeholder="0"><span>años</span></div>
+    <div class="acell"><input type="number" id="cMeses" min="0" max="11" placeholder="0"><span>meses</span></div>
+    <div class="acell"><input type="number" id="cDias"  min="0" max="30" placeholder="0"><span>días</span></div>
+  </div>
+
+  <div class="drow">
+    <div class="dw">
+      <label class="lbl">📅 Fecha del control</label>
+      <input type="date" id="cFecha" class="inp">
+    </div>
+    <div class="cw">
+      <label class="lbl">N° ctrl</label>
+      <input type="text" id="cNum" class="inp cinp" placeholder="0" maxlength="1"
+             onkeypress="return /[1-7]/.test(event.key)">
+    </div>
+  </div>
+
+  <button class="btn-calc" onclick="calcCred()">🔍 Ver Controles CRED</button>
+  <div id="credRes"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     PANEL 1 – SUPLEMENTACIÓN
+══════════════════════════════════ -->
+<div class="panel" id="panel1">
+  <div class="drow" style="margin-top:0;margin-bottom:10px;">
+    <div class="dw">
+      <label class="lbl">📅 Fecha de inicio de suplementación</label>
+      <input type="date" id="supFecha" class="inp">
+    </div>
+    <div class="cw">
+      <label class="lbl">N° sup</label>
+      <input type="text" id="supNum" class="inp cinp" placeholder="0" maxlength="1"
+             onkeypress="return /[1-6]/.test(event.key)">
+    </div>
+  </div>
+
+  <label class="lbl">💊 Selecciona el tipo de hierro</label>
+  <div class="sgrid">
+    <button class="sbtn sp-btn" id="btnPoli" onclick="selSup('POLI')">
+      <span class="sico">💜</span> POLIMALTOSADO
+    </button>
+    <button class="sbtn ss" id="btnSulf" onclick="selSup('SULF')">
+      <span class="sico">🟡</span> SULFATO FERROSO
+    </button>
+  </div>
+  <div id="supRes" class="mt10"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     PANEL 2 – CÁLCULO MANUAL
+══════════════════════════════════ -->
+<div class="panel" id="panel2">
+  <label class="lbl">🧒 Edad actual del niño</label>
+  <div class="agrid">
+    <div class="acell"><input type="number" id="mAnios" placeholder="0"><span>años</span></div>
+    <div class="acell"><input type="number" id="mMeses" placeholder="0"><span>meses</span></div>
+    <div class="acell"><input type="number" id="mDias"  placeholder="0"><span>días</span></div>
+  </div>
+  <div class="mt8">
+    <label class="lbl">📅 Fecha del control</label>
+    <input type="date" id="mFecha" class="inp">
+  </div>
+  <div class="mt8">
+    <label class="lbl">➕ Días a sumar</label>
+    <input type="number" id="mSumar" placeholder="Ej: 30" class="inp">
+  </div>
+  <button class="btn-man" onclick="calcManual()">⚡ Calcular</button>
+  <div class="manres" id="manRes">
+    <div class="rl">📅 Fecha resultante</div>
+    <div class="rv" id="mFechaR"></div>
+    <div class="rl">🎂 Nueva edad</div>
+    <div class="rv" id="mEdadR" style="font-size:1.15rem;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PANEL 3 – HB
+══════════════════════════════════ -->
+<div class="panel" id="panel3">
+  <label class="lbl">🎂 Edad del niño</label>
+  <div class="agrid">
+    <div class="acell"><input type="number" id="hbA" placeholder="0"><span>años</span></div>
+    <div class="acell"><input type="number" id="hbM" placeholder="0"><span>meses</span></div>
+    <div class="acell"><input type="number" id="hbD" placeholder="0"><span>días</span></div>
+  </div>
+  <div class="mt8">
+    <label class="lbl">🩸 Hemoglobina (g/dL)</label>
+    <input type="number" step="0.1" min="0" max="25" id="hbVal" placeholder="Ej: 10.5" class="inp"
+           inputmode="decimal">
+  </div>
+  <div class="mt8">
+    <label class="lbl">⛰️ Elevación (m.s.n.m.)</label>
+    <select id="hbElev" class="inp">
+      <option value="0">1 - 499 m → restar 0</option>
+      <option value="0.4">500 - 999 m → restar 0.4</option>
+      <option value="0.8">1000 - 1499 m → restar 0.8</option>
+      <option value="1.1">1500 - 1999 m → restar 1.1</option>
+      <option value="1.4">2000 - 2499 m → restar 1.4</option>
+      <option value="1.8">2500 - 2999 m → restar 1.8</option>
+      <option value="2.1">3000 - 3499 m → restar 2.1</option>
+      <option value="2.5">3500 - 3999 m → restar 2.5</option>
+      <option value="2.9">4000 - 4499 m → restar 2.9</option>
+      <option value="3.3">4500 - 4999 m → restar 3.3</option>
+    </select>
+  </div>
+  <button class="btn-hb" onclick="calcHB()">🩸 Calcular Hemoglobina</button>
+  <div class="hbres" id="hbRes">
+    <div class="hbrl">Hb ajustada por altitud</div>
+    <div class="hbrv" id="hbAj"></div>
+    <div class="hbrl">Diagnóstico</div>
+    <div class="hbrv" id="hbTipo" style="font-size:1.2rem;"></div>
+  </div>
+</div>
+
+<!-- ══ LIMPIAR TODO ══ -->
+<button class="btn-limp" onclick="limpiarTodo()">
+  <span style="font-size:1.3rem;">🔄</span> LIMPIAR TODO
+</button>
+
+<script>
+/* ══════════════════════════════
+   NORMATIVA CRED
+   hito  = días de vida al ENTRAR
+   lim   = días de vida al SALIR
+   n     = total controles
+   iv    = intervalos entre controles
+══════════════════════════════ */
+const GRUPOS=[
+  {t:'👶 Recién Nacido (1-29 días)',    gb:'gb0',hito:0,   lim:30,  n:3,iv:[7,7]},
+  {t:'🍼 Menor de 1 Año (1-11 meses)', gb:'gb1',hito:30,  lim:365, n:7,iv:[30,30,30,60,30,60]},
+  {t:'🧒 1 Año (12-23 meses)',         gb:'gb2',hito:365, lim:730, n:4,iv:[90,90,90]},
+  {t:'✌️ 2 Años (24-35 meses)',        gb:'gb3',hito:730, lim:1095,n:2,iv:[180]},
+  {t:'3️⃣ 3 Años (36-47 meses)',       gb:'gb4',hito:1095,lim:1460,n:2,iv:[180]},
+  {t:'4️⃣ 4 Años (48-59 meses)',       gb:'gb5',hito:1460,lim:1825,n:2,iv:[180]}
+];
+
+/* ─ fecha utils ─ */
+function pL(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function addD(dt,n){const r=new Date(dt);r.setDate(r.getDate()+n);return r;}
+function fmt(dt){return[String(dt.getDate()).padStart(2,'0'),String(dt.getMonth()+1).padStart(2,'0'),dt.getFullYear()].join('/');}
+function fmtS(s){if(!s)return'';const[y,m,d]=s.split('-');return`${d}/${m}/${y}`;}
+function edStr(d){
+  d=Math.round(d);
+  if(d<30)return`${d} día${d!==1?'s':''}`;
+  const a=Math.floor(d/365),r=d-a*365,me=Math.floor(r/30);
+  if(a===0)return`${me} mes${me!==1?'es':''}`;
+  return`${a} año${a!==1?'s':''} ${me>0?me+' mes'+(me!==1?'es':''):''}`.trim();
+}
+
+/* ─ dark mode ─ */
+function toggleDark(){
+  document.documentElement.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=document.documentElement.classList.contains('dark')?'☀️':'🌙';
+}
+
+/* ─ edad badge (fecha nac) ─ */
+function actualizarEdad(){
+  const nac=document.getElementById('fechaNac').value;
+  const badge=document.getElementById('edadBadge');
+  const premAlert=document.getElementById('premAlert');
+  const premForm=document.getElementById('premForm');
+  const ecBadge=document.getElementById('edadCorregidaBadge');
+
+  // Ocultar sección corregida al cambiar fecha
+  premForm.classList.remove('show');
+  ecBadge.classList.remove('show');
+  document.getElementById('semanasPrematuro').value='';
+
+  if(!nac){
+    badge.style.display='none';
+    premAlert.classList.remove('show');
+    return;
+  }
+  const n=pL(nac),h=new Date();
+  let a=h.getFullYear()-n.getFullYear(),me=h.getMonth()-n.getMonth(),di=h.getDate()-n.getDate();
+  if(me<0||(me===0&&di<0)){a--;me+=12;}
+  if(di<0){di+=new Date(h.getFullYear(),h.getMonth(),0).getDate();me--;}
+  let s='';
+  if(a>0)s+=`${a} año${a>1?'s ':' '}`;
+  if(me>0)s+=`${me} mes${me>1?'es ':' '}`;
+  if(di>0)s+=`${di} día${di>1?'s':''}`;
+  document.getElementById('edadTexto').textContent=s.trim()||'0 días';
+  badge.style.display='block';
+
+  // Mostrar botón "Corregir edad" solo si el niño es menor de 2 años
+  const totalDias=a*365+me*30+di;
+  if(totalDias < 730){ // 2 años = ~730 días
+    premAlert.classList.add('show');
+  } else {
+    premAlert.classList.remove('show');
+  }
+}
+
+/* ─ pista dinámica semanas ─ */
+function mostrarPistaSemanas(val){
+  const pista=document.getElementById('premPista');
+  const sem=parseInt(val);
+  if(!val||isNaN(sem)||sem<23){
+    pista.classList.remove('show');
+    return;
+  }
+  if(sem>=38){
+    pista.style.background='#fef2f2';
+    pista.style.borderColor='#ef4444';
+    pista.style.color='#b91c1c';
+    pista.innerHTML=`🚫 Con <strong>${sem} semanas</strong> no se considera parto prematuro.<br>El límite es hasta las <strong>37 semanas</strong>. Por favor verifica el dato.`;
+    pista.classList.add('show');
+    return;
+  }
+  pista.style.background='';
+  pista.style.borderColor='';
+  pista.style.color='';
+  const semanasPremat=40-sem;
+  pista.innerHTML=`🍼 Tu bebé nació a las <strong>${sem} semanas</strong> de gestación · ${semanasPremat} sem. antes del término`;
+  pista.classList.add('show');
+}
+
+/* ─ mostrar formulario de corrección ─ */
+function mostrarFormCorreccion(){
+  document.getElementById('premForm').classList.add('show');
+  document.getElementById('edadCorregidaBadge').classList.remove('show');
+  document.getElementById('premPista').classList.remove('show');
+  setTimeout(()=>document.getElementById('semanasPrematuro').focus(),100);
+}
+
+/* ─ calcular edad corregida ─ */
+function calcEdadCorregida(){
+  const semStr=document.getElementById('semanasPrematuro').value.trim();
+  const semGest=parseInt(semStr);
+  if(!semStr||isNaN(semGest)||semGest<23){
+    alert('⚠️ Ingresa las semanas de gestación al nacer (entre 23 y 37 semanas).');
+    return;
+  }
+  if(semGest>=38){
+    alert('🚫 Un nacimiento a las '+semGest+' semanas no se considera prematuro.\nSolo se aplica corrección de edad para bebés nacidos hasta las 37 semanas.');
+    return;
+  }
+  const sem=40-semGest; // semanas de prematuridad
+  const nac=document.getElementById('fechaNac').value;
+  if(!nac)return;
+
+  // Edad cronológica (texto ya calculado)
+  const cronText=document.getElementById('edadTexto').textContent;
+
+  // Calcular edad corregida: restar las semanas de prematuridad en días
+  const n=pL(nac),h=new Date();
+  const diasCron=Math.floor((h-n)/86400000);
+  const diasCorr=diasCron - (sem*7);
+
+  let txtCorr='';
+  if(diasCorr<=0){
+    txtCorr='Recién nacido (aún en edad esperada)';
+  } else {
+    const ac=Math.floor(diasCorr/365);
+    const rc=diasCorr-ac*365;
+    const mc=Math.floor(rc/30);
+    const dc=rc%30;
+    if(ac>0) txtCorr+=`${ac} año${ac>1?'s ':' '}`;
+    if(mc>0) txtCorr+=`${mc} mes${mc>1?'es ':' '}`;
+    if(dc>0) txtCorr+=`${dc} día${dc>1?'s':''}`;
+    txtCorr=txtCorr.trim()||'0 días';
+  }
+
+  document.getElementById('ecSemanas').textContent=`${semGest} sem. de gestación (${sem} sem. prematuro)`;
+  document.getElementById('ecCronologica').textContent=cronText;
+  document.getElementById('ecCorregida').textContent=txtCorr;
+  const badge=document.getElementById('edadCorregidaBadge');
+  badge.classList.add('show');
+  setTimeout(()=>{
+    const rect=badge.getBoundingClientRect();
+    window.scrollBy({top:rect.bottom-window.innerHeight+20,behavior:'smooth'});
+  },80);
+}
+
+/* ─ tabs ─ */
+function irTab(n){
+  for(let i=0;i<4;i++){
+    document.getElementById(`tab${i}`).classList.toggle('on',i===n);
+    document.getElementById(`panel${i}`).classList.toggle('on',i===n);
+  }
+  document.getElementById('errBox').style.display='none';
+}
+
+/* ─ error ─ */
+function showErr(m){
+  const e=document.getElementById('errBox');
+  document.getElementById('errInner').textContent=m;
+  e.style.display='block';
+}
+
+/* ══ PANEL 0: CONTROL CRED ══ */
+function calcCred(){
+  document.getElementById('errBox').style.display='none';
+  document.getElementById('credRes').innerHTML='';
+  const fechaStr=document.getElementById('cFecha').value;
+  const numStr=document.getElementById('cNum').value.trim();
+  const a=parseInt(document.getElementById('cAnios').value)||0;
+  const me=parseInt(document.getElementById('cMeses').value)||0;
+  const di=parseInt(document.getElementById('cDias').value)||0;
+  if(!fechaStr){showErr('⚠️ Selecciona la fecha del control.');return;}
+  if(!numStr){showErr('⚠️ Ingresa el número de control (1-7).');return;}
+  const nc=parseInt(numStr);
+  const DM=365/12;
+  const dv=a*365+me*DM+di;
+  if(dv>=1825){showErr('El niño ya cumplió 5 años. No hay controles pendientes.');return;}
+  const fNac=addD(pL(fechaStr),-Math.round(dv));
+  let fCtrl=pL(fechaStr),dvc=dv,html='',primero=true,ci0;
+  for(const g of GRUPOS){
+    if(Math.round(dvc)>=g.lim)continue;
+    if(primero){
+      if(nc>g.n){showErr(`⚠️ Ese grupo solo tiene ${g.n} controles.`);return;}
+      ci0=nc;
+    }else{
+      ci0=1;fCtrl=addD(fNac,g.hito);dvc=g.hito;
+    }
+    html+=`<div class="ghdr"><span class="gbadge ${g.gb}">${g.t}</span><div class="gline"></div></div>`;
+    for(let ci=ci0;ci<=g.n;ci++){
+      if(Math.round(dvc)>=g.lim)break;
+      const hl=primero&&ci===ci0;
+      html+=`<div class="ccard${hl?' hl':''}">
+        <div class="cleft">
+          <span class="cn">Control ${ci}</span>
+          <span class="ce">Edad: ${edStr(dvc)}</span>
+        </div>
+        <span class="cf">${fmt(fCtrl)}</span>
+      </div>`;
+      if(ci<g.n){const p=g.iv[ci-1];fCtrl=addD(fCtrl,p);dvc+=p;}
+    }
+    primero=false;
+  }
+  if(!html)html='<p style="text-align:center;color:#64748b;padding:18px 0;font-weight:800;">No hay controles futuros.</p>';
+  const r=document.getElementById('credRes');
+  r.innerHTML=html;
+  setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+/* ══ PANEL 1: SUPLEMENTACIÓN ══ */
+let supActual=null;
+function selSup(t){
+  supActual=t;
+  document.getElementById('btnPoli').classList.toggle('on',t==='POLI');
+  document.getElementById('btnSulf').classList.toggle('on',t==='SULF');
+  renderSup();
+}
+function renderSup(){
+  const fecha=document.getElementById('supFecha').value;
+  const numStr=document.getElementById('supNum').value.trim();
+  if(!fecha){alert('Por favor ingresa la fecha de inicio de suplementación');return;}
+  if(!numStr){alert('Por favor ingresa el número de suplemento');return;}
+  const numInicio=parseInt(numStr);
+  const eP=supActual==='POLI';
+  const iv=eP?60:30, max=eP?3:6;
+  const nom=eP?'Polimaltosado de Hierro':'Sulfato Ferroso';
+  const col=eP?'#a855f7':'#f59e0b';
+  if(numInicio>max){
+    alert(`${nom} solo tiene ${max} suplementos. El número ingresado es mayor.`);
+    return;
+  }
+  // Mostramos desde el suplemento siguiente al ingresado hasta el máximo
+  // El suplemento ingresado (numInicio) es la fecha base; mostramos numInicio+1 en adelante
+  // Si quieren ver todos desde el inicio, ingresan 1 y verán del 2 al máx
+  // La fecha ingresada corresponde al suplemento numInicio
+  let fa=fecha;
+  let html='';
+  // Primero avanzar la fecha al siguiente suplemento
+  if(numInicio>=max){
+    html='<p style="text-align:center;color:#64748b;padding:14px 0;font-weight:800;font-size:.85rem;">✅ Este es el último suplemento. No hay más pendientes.</p>';
+    document.getElementById('supRes').innerHTML=html;
+    return;
+  }
+  html=`<div style="font-family:'Bubblegum Sans',cursive;color:${col};font-size:.92rem;margin:10px 0 7px;text-align:center;">${nom} — Suplementos pendientes</div>`;
+  // La fecha base es el suplemento numInicio; avanzamos para mostrar desde numInicio+1
+  let f=new Date(fa);
+  f.setDate(f.getDate()+iv);
+  fa=f.toISOString().split('T')[0];
+  for(let i=numInicio+1;i<=max;i++){
+    html+=`<div class="dcard" style="border-color:${col}44;">
+      <div class="cleft">
+        <span class="dn" style="color:${col};">Suplemento ${i}</span>
+        <span class="dc">Cada ${iv} días</span>
+      </div>
+      <span class="df">${fmtS(fa)}</span>
+    </div>`;
+    if(i<max){
+      const ff=new Date(fa);ff.setDate(ff.getDate()+iv);
+      fa=ff.toISOString().split('T')[0];
+    }
+  }
+  document.getElementById('supRes').innerHTML=html;
+}
+
+/* ══ PANEL 2: CÁLCULO MANUAL ══ */
+function calcManual(){
+  const fecha=document.getElementById('mFecha').value;
+  const ds=parseInt(document.getElementById('mSumar').value)||0;
+  const a=parseInt(document.getElementById('mAnios').value)||0;
+  const me=parseInt(document.getElementById('mMeses').value)||0;
+  const di=parseInt(document.getElementById('mDias').value)||0;
+  if(!fecha){alert('Ingresa la fecha inicial');return;}
+  const nf=addD(pL(fecha),ds);
+  let nd=di+ds,nm=me+Math.floor(nd/30),na=a;
+  nd=nd%30;na+=Math.floor(nm/12);nm=nm%12;
+  document.getElementById('mFechaR').textContent=fmt(nf);
+  const el=document.getElementById('mEdadR');
+  el.textContent=`${na} años ${nm} meses ${nd} días`;
+  el.style.color=na>a?'#ef4444':'#047857';
+  document.getElementById('manRes').style.display='block';
+}
+
+/* ══ PANEL 3: HB ══ */
+function calcHB(){
+  const a=parseInt(document.getElementById('hbA').value)||0;
+  const hb=parseFloat(document.getElementById('hbVal').value);
+  const co=parseFloat(document.getElementById('hbElev').value)||0;
+  if(isNaN(hb))return;
+  const haj=parseFloat((hb-co).toFixed(1));
+  let tipo='Normal',col='#16a34a';
+  if(a<=1){
+    if(haj<7){tipo='Anemia Severa';col='#dc2626';}
+    else if(haj<9.5){tipo='Anemia Moderada';col='#dc2626';}
+    else if(haj<10.5){tipo='Anemia Leve';col='#f97316';}
+  }else if(a>=2&&a<=4){
+    if(haj<7){tipo='Anemia Severa';col='#dc2626';}
+    else if(haj<10){tipo='Anemia Moderada';col='#dc2626';}
+    else if(haj<11){tipo='Anemia Leve';col='#f97316';}
+  }else{
+    if(haj<8){tipo='Anemia Severa';col='#dc2626';}
+    else if(haj<11){tipo='Anemia Moderada';col='#dc2626';}
+    else if(haj<11.5){tipo='Anemia Leve';col='#f97316';}
+  }
+  document.getElementById('hbAj').innerHTML=`<span style="color:${col};">${haj} g/dL</span>`;
+  document.getElementById('hbTipo').innerHTML=`<span style="color:${col};">${tipo}</span>`;
+  document.getElementById('hbRes').style.display='block';
+}
+
+/* ══ LIMPIAR TODO ══ */
+function limpiarTodo(){
+  document.querySelectorAll('input').forEach(e=>e.value='');
+  document.querySelectorAll('select').forEach(e=>e.selectedIndex=0);
+  document.getElementById('edadBadge').style.display='none';
+  document.getElementById('premAlert').classList.remove('show');
+  document.getElementById('premForm').classList.remove('show');
+  document.getElementById('premPista').classList.remove('show');
+  document.getElementById('edadCorregidaBadge').classList.remove('show');
+  document.getElementById('credRes').innerHTML='';
+  document.getElementById('supRes').innerHTML='';
+  document.getElementById('manRes').style.display='none';
+  document.getElementById('hbRes').style.display='none';
+  document.getElementById('errBox').style.display='none';
+  document.getElementById('btnPoli').classList.remove('on');
+  document.getElementById('btnSulf').classList.remove('on');
+  supActual=null;
+  irTab(0);
+}
+</script>
+</body>
+</html>
